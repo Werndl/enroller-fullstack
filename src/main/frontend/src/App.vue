@@ -12,9 +12,9 @@
     </div>
     <div v-else>
       <button @click="registering = false"
-              :class="registering ? 'button-outline' : ''">Zaloguj się</button>
+              :class="registering ? 'button-outline' : ''">Loguję się</button>
       <button @click="registering = true"
-              :class="!registering ? 'button-outline' : ''">Zarejestruj się</button>
+              :class="!registering ? 'button-outline' : ''">Rejestruję się</button>
 
       <div v-if="error" class="error-alert">{{ error }}</div>
 
@@ -24,48 +24,42 @@
       <login-form @login="register($event)"
                   v-else
                   button-label="Zarejestruj się"></login-form>
-
     </div>
   </div>
 </template>
 
 <script>
-    import "milligram";
-    import LoginForm from "./LoginForm";
-    import MeetingsPage from "./meetings/MeetingsPage";
-
-    export default {
-        components: {LoginForm, MeetingsPage},
-        data() {
-            return {
-                authenticatedUsername: "",
-                registering: false,
-                error: ''
-            };
-        },
-        methods: {
-            login(user) {
-                this.authenticatedUsername = user.login;
-            },
-
-            logout() {
-                this.authenticatedUsername = '';
-            },
-
-          register(user) {
-              ths.error = '';
-            this.$http.post('participants', user)
-                    .then(response => {
-                      this.registering = false;
-                      // udało się
-                    })
-                    .catch(response => {
-                      this.error = "Nazwa użytkownika jest zajęta"
-                      // nie udało sie
-                    });
-          }
-        }
-    };
+  import "milligram";
+  import LoginForm from "./LoginForm";
+  import MeetingsPage from "./meetings/MeetingsPage";
+  export default {
+    components: {LoginForm, MeetingsPage},
+    data() {
+      return {
+        authenticatedUsername: "",
+        registering: false,
+        error: ''
+      };
+    },
+    methods: {
+      login(user) {
+        this.authenticatedUsername = user.login;
+      },
+      register(user) {
+        this.error = '';
+        this.$http.post('participants', user)
+                .then(response => {
+                  this.registering = false;
+                })
+                .catch(response => {
+                  this.error = "Nazwa użytkownika jest zajęta";
+                });
+      },
+      logout() {
+        this.authenticatedUsername = '';
+      }
+    }
+  };
 </script>
 
 <style>
@@ -73,15 +67,15 @@
     max-width: 1000px;
     margin: 0 auto;
   }
-
   .logo {
     vertical-align: middle;
   }
+
   .error-alert {
     border: 3px dotted red;
     padding: 10px;
     background: pink;
     text-align: center;
+    border-radius: 50%;
   }
 </style>
-
