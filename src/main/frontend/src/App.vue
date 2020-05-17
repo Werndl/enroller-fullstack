@@ -16,6 +16,8 @@
       <button @click="registering = true"
               :class="!registering ? 'button-outline' : ''">Zarejestruj się</button>
 
+      <div v-if="error" class="error-alert">{{ error }}</div>
+
       <login-form @login="login($event)"
                   v-if="registering == false"></login-form>
 
@@ -37,7 +39,8 @@
         data() {
             return {
                 authenticatedUsername: "",
-                registering: false
+                registering: false,
+                error: ''
             };
         },
         methods: {
@@ -50,11 +53,14 @@
             },
 
           register(user) {
+              ths.error = '';
             this.$http.post('participants', user)
                     .then(response => {
+                      this.registering = false;
                       // udało się
                     })
                     .catch(response => {
+                      this.error = "Nazwa użytkownika jest zajęta"
                       // nie udało sie
                     });
           }
@@ -70,6 +76,12 @@
 
   .logo {
     vertical-align: middle;
+  }
+  .error-alert {
+    border: 3px dotted red;
+    padding: 10px;
+    background: pink;
+    text-align: center;
   }
 </style>
 
